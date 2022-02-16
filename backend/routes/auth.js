@@ -3,6 +3,7 @@ const router = express.Router();
 const User = require("../models/User");
 const { body, validationResult } = require("express-validator");
 const bcrypt = require("bcryptjs");
+const fetchUser = require("../middleware/fetchUser")
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = "itsgonnabeoursecret";
 
@@ -74,18 +75,19 @@ router.post(
       console.log("user:", user);
       res.json({ authToken }); //ES6: for sending data like authToken:authToken
     } catch (err) {
-      res.status(500).send("something went wrong!");
+      res.status(500).json({ error: "Internal server error" });
     }
   }
 );
 
 // Get Logged in User Details: GET "/api/auth/authuser" login required
-router.post("/authuser", async (req, res) => {
+router.post("/authuser",fetchUser, async (req, res) => {
   try {
-    const user_id = "dhruvin";
+    const user_id = req.user.id;
     const user = await User.findOne(user_id).select("-password"); // get user data of all the fields except the password field
+    res.json({user})
   } catch (err) {
-    res.status(500).send("something went wrong!");
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 module.exports = router;
