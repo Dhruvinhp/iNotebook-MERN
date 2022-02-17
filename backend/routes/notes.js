@@ -69,7 +69,7 @@ router.patch("/updatenote/:id", fetchUser, async (req, res) => {
 
     // find the note and update the note
     let note = await Note.findById(req.params.id)
-    if(!note){return res.status(404).send("Not Found")}
+    if(!note){return res.status(404).send("404 Not Found")}
     if(note.user.toString() !== req.user.id){
       return res.status(401).send("Unauthorized")
     }
@@ -90,7 +90,7 @@ router.delete("/deletenote/:id", fetchUser, async (req, res) => {
       return res.status(401).send("Unauthorized")
     }
     note = await Note.findByIdAndDelete(req.params.id) 
-    res.json({ message: "note deleted!" });
+    res.json({ message: "Note successfully deleted!" });
   } catch {
     res.status(500).json({ error: "Internal server error" });
   }

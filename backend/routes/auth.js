@@ -72,7 +72,6 @@ router.post(
         user: { id: user.id },
       };
       const authToken = jwt.sign(data, JWT_SECRET);
-      console.log("user:", user);
       res.json({ authToken }); //ES6: for sending data like authToken:authToken
     } catch (err) {
       res.status(500).json({ error: "Internal server error" });
